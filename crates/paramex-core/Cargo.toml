@@ -1,0 +1,17 @@
+# crates/paramex-core/Cargo.toml
+[package]
+name = "paramex-core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[dependencies]
+calamine = "0.35"
+csv = "1.3"
+indexmap = "2"
+sha2 = "0.10"
+
+[dev-dependencies]
+rust_xlsxwriter = "0.95.0"
+serde_json = { version = "1", features = ["float_roundtrip"] }

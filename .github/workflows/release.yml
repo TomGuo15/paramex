@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows-exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Verify release tag matches the crate version
+        shell: pwsh
+        run: |
+          $tagVersion = "${{ github.ref_name }}".Substring(1)
+          $cargoVersion = (Select-String -Path "crates/paramex-gui/Cargo.toml" -Pattern '^version = "([^"]+)"' | Select-Object -First 1).Matches[0].Groups[1].Value
+          if ($cargoVersion -ne $tagVersion) {
+            throw "release tag v$tagVersion does not match paramex-gui version $cargoVersion"
+          }
+
+      - name: Run Rust verification gates
+        run: |
+          cargo fmt --all --check
+          cargo test --workspace
+          cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Create portable ParamEx.exe
+        shell: pwsh
+        run: .\packaging\windows\build-local-dist.ps1
+
+      - name: Enforce release binary size gate
+        shell: pwsh
+        run: |
+          $exe = "target/release/paramex-gui.exe"
+          $max = 15MB
+          $size = (Get-Item $exe).Length
+          if ($size -gt $max) {
+            throw "paramex-gui.exe is $size bytes, above the 15MB gate"
+          }
+
+      - name: Smoke-test the built exe (process starts, then stop it)
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath "target\dist\ParamEx\ParamEx.exe" -PassThru -WindowStyle Hidden
+          Start-Sleep -Seconds 12
+          if ($p.HasExited) { throw "ParamEx.exe exited early (code $($p.ExitCode))" }
+          Stop-Process -Id $p.Id -Force
+
+      - name: Add dependency notices
+        shell: pwsh
+        run: |
+          cargo install cargo-about --locked --features cli --version 0.9.0
+          cargo about generate -c packaging/licenses/about.toml -o target/dist/ParamEx/THIRD-PARTY-LICENSES.html packaging/licenses/about.hbs
+
+      - name: Create release ZIP
+        shell: pwsh
+        run: Compress-Archive -Path "target\dist\ParamEx\*" -DestinationPath "target\dist\ParamEx-${{ github.ref_name }}-windows-x64.zip"
+
+      - name: Publish Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/dist/ParamEx-${{ github.ref_name }}-windows-x64.zip
+          body: |
+            Portable Windows build. Extract the ZIP and run `ParamEx.exe`.
+
+            This build is unsigned, so Windows may show a SmartScreen warning.
+            The ZIP includes the MIT license and third-party dependency notices.

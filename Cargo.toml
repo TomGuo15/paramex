@@ -1,0 +1,12 @@
+# Cargo.toml
+[workspace]
+resolver = "2"
+members = ["crates/paramex-core", "crates/paramex-gui"]
+
+# Size-optimized release profile for the portable Windows binary.
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "unwind"
+strip = true

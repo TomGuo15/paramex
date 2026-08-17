@@ -1,0 +1,30 @@
+# Python/local tooling
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.pyright/
+
+# Rust/build outputs
+target/
+build/
+dist/
+
+# GUI render/inspection artifacts
+crates/paramex-gui/tests/snapshots/*
+.playwright-mcp/
+python_original_empty.png
+
+# Agent/local scratch
+.claude/
+.superpowers/
+
+# Local analysis/export scratch — figures, decks, and ad-hoc CSVs. Curated,
+# documented raw measurement fixtures belong under the owning test fixture tree.
+outputs/
+
+# OS/editor noise
+*.spec.bak
+.DS_Store
+Thumbs.db

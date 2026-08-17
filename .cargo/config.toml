@@ -1,0 +1,4 @@
+[env]
+# ponytail: egui_kittest's wgpu harness is process-global on Windows; remove
+# this when the GUI harnesses are thread-safe under libtest parallelism.
+RUST_TEST_THREADS = { value = "1", force = true }

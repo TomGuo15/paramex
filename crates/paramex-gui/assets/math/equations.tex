@@ -1,0 +1,206 @@
+% Source for the Technical Guide equation SVGs. Regenerate with MiKTeX:
+%   latex -interaction=nonstopmode -halt-on-error -output-directory=target/math-guide crates/paramex-gui/assets/math/equations.tex
+%   dvisvgm --no-fonts --exact-bbox --page=1- --output=equation-%p.svg target/math-guide/equations.dvi
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage[active,tightpage,displaymath]{preview}
+\definecolor{guideink}{HTML}{000F30}
+\setlength{\PreviewBorder}{1pt}
+\setlength{\jot}{3pt}
+\pagestyle{empty}
+
+\begin{document}
+
+% 1: transfer-threshold.svg
+\begin{equation*}\color{guideink}
+  \sqrt{|I_D|}=mV_G+b,
+  \qquad V_{\mathrm{TH}}=-\frac{b}{m},
+  \qquad \mu_{\mathrm{sat}}=\frac{2m^2}{C_{\mathrm{ox}}(W/L)}
+\end{equation*}
+
+% 2: transfer-subthreshold.svg
+\begin{equation*}\color{guideink}
+  \log_{10}|I_D|=sV_G+c,
+  \qquad SS=\left|\frac{1000}{s}\right|\ \mathrm{mV/dec}
+\end{equation*}
+
+% 3: transfer-on-off-hysteresis.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  I_{\mathrm{on}}&=\max |I_D|,
+  & I_{\mathrm{off}}&=\min_{|I_D|>0}|I_D|,
+  & \mathrm{on/off}&=I_{\mathrm{on}}/I_{\mathrm{off}},\\
+  \Delta V_{\mathrm{TH}}
+  &=\underset{\log I}{\operatorname{median}}
+    \left[V_G^{\mathrm{bwd}}(\log I)-V_G^{\mathrm{fwd}}(\log I)\right].
+\end{aligned}
+\end{equation*}
+
+% 4: tlm-current.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  j_d&=\underset{j}{\arg\min}\,|V_{G,dj}-V_G^*|,
+  & I_{\mathrm{ch},d}(V_G^*)&=\min\!\left(|I_{D,dj_d}|,|I_{S,dj_d}|\right),\\
+  I_L&=\max_d I_{\mathrm{ch},d},
+  & R_{\mathrm{tot}}(L)&=\frac{|V_D|}{I_L}.
+\end{aligned}
+\end{equation*}
+
+% 5: tlm-regression.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  R_{\mathrm{tot}}(L)&=mL+b=mL+2R_c,
+  & R_c/\mathrm{contact}&=\frac{b}{2},\\
+  m&=\frac{n\sum LR-(\sum L)(\sum R)}{n\sum L^2-(\sum L)^2},
+  & b&=\frac{\sum R-m\sum L}{n},\\
+  R^2&=1-\frac{\sum(R-\widehat R)^2}{\sum(R-\overline R)^2}.
+\end{aligned}
+\end{equation*}
+
+% 6: aostft-h-function.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  H(V_G)
+    &=\frac{\displaystyle\int_{V_{G,0}}^{V_G}|I_D(u)|\,du}{|I_D(V_G)|}
+      =aV_G+b,\\
+  V_T&=-\frac{b}{a},
+  & \gamma_H&=\frac{1}{a}-2,\\
+  K_H&=\underset{|I_D|\,\ge\,0.01I_{\mathrm{peak}},\;V_G>V_T}{\operatorname{median}}
+       \frac{|I_D|}{(V_G-V_T)^{1+\gamma_H}}.
+\end{aligned}
+\end{equation*}
+
+% 7: aostft-crossover.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  x&=V_{GS}-V_T,
+  & u_\delta(x)&=\frac{x+\sqrt{x^2+\delta^2}}{2},
+  & \delta&=0.05\ \mathrm V,\\
+  I_A^{(H)}(x)&=K_Hu_\delta(x)^{1+\gamma_H},
+  & p&=1+\gamma_H,\\
+  D_V&=\sqrt{\max\!\left[\left(\frac{pS}{\ln 10}\right)^2-\delta^2,0\right]},
+  & Q&=\frac{2}{S},\\
+  I_B(x,V_D)&=I_A(D_V,V_D)10^{(x-D_V)/S},
+  & w&=Q(x-D_V),\\
+  I_D(x,V_D)&=\frac{1+\tanh w}{2}I_A(x,V_D)
+      +\frac{1-\tanh w}{2}I_B(x,V_D)+I_{\mathrm{off}},
+  & S&=SS\ \mathrm{(V/dec)}.
+\end{aligned}
+\end{equation*}
+
+% 8: aostft-output-mapping.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  \gamma_c&=\gamma_H-1,
+  & K_c&=\frac{K_HV_{D,t}}{\alpha_{\mathrm{sat}}(1+\lambda V_{D,t})},
+  & G_0&=\frac{K_c}{V_{D,t}},\\
+  K_P&=G_0\frac{L_{\mathrm{fit}}}{W_{\mathrm{fit}}},
+  & g_{\mathrm{instance}}&=\frac WL K_P.
+\end{aligned}
+\end{equation*}
+
+% 9: aostft-finite-drain.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  g_{\mathrm{ch}}&=\frac{G_0u_\delta(x)^{1+\gamma_c}}
+    {1+R_SG_0u_\delta(x)^{1+\gamma_c}},
+  & V_{D\mathrm{sat}}&=\alpha_{\mathrm{sat}}u_\delta(x),\\
+  V_{De}&=\frac{V_D}
+    {\left[1+|V_D/V_{D\mathrm{sat}}|^m\right]^{1/m}},
+  & I_A(x,V_D)&=g_{\mathrm{ch}}V_{De}(1+\lambda V_D).
+\end{aligned}
+\end{equation*}
+
+% 10: aostft-charge.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  a&=u_{0.2\,\mathrm V}(x),
+  & b&=u_{0.05\,\mathrm V}(a-V_D),\\
+  Q_g&=\frac{2}{3}C_{\mathrm{ox}}WL
+    \frac{a^2+ab+b^2}{a+b+\varepsilon_1},
+  & f_d&=\frac{b^2}{a^2+b^2+\varepsilon_2},\\
+  \varepsilon_1&=10^{-9}\ \mathrm V,
+  & \varepsilon_2&=10^{-18}\ \mathrm V^2,\\
+  Q_d&=-f_dQ_g,
+  & Q_s&=-(1-f_d)Q_g.
+\end{aligned}
+\end{equation*}
+
+% 11: level62-electrostatics.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  V_{\mathrm{th}}&=\frac{kT}{q},
+  & V_{\mathrm{sth}}&=\mathrm{ETA}\,V_{\mathrm{th}},
+  & C_{\mathrm{ox}}&=\frac{\mathrm{EPSI}\,\varepsilon_0}{\mathrm{TOX}},\\
+  \Delta T&=T-\mathrm{TNOM},
+  & V_{TX}&=\mathrm{VTO}-\mathrm{DVTO}\,\Delta T,
+  & \mu_1(T)&=\mathrm{MU1}+\mathrm{DMU1}\,\Delta T,\\
+  V_{T\mathrm{eff}}&=V_{TX}-
+    \frac{\mathrm{AT}\,V_{DS}^2+\mathrm{BT}}
+    {L_{\mathrm{eff}}\!\left[1+\exp\!\left(\frac{V_{GS}-\mathrm{VST}-V_{TX}}{\mathrm{VSI}}\right)\right]},\\
+  V_{GT}&=V_{GS}-V_{T\mathrm{eff}},
+  & V_{\min}&=2V_{\mathrm{sth}},\\
+  V_{GTE}&=\frac{V_{\min}}2\!\left[1+\frac{V_{GT}}{V_{\min}}+
+    \sqrt{\mathrm{DELTA}^2+\left(\frac{V_{GT}}{V_{\min}}-1\right)^2}\right],\\
+  \frac1{\mu_{\mathrm{FET}}}&=\frac1{\mathrm{MU0}}+
+    \frac1{\mu_1(T)(2V_{GTE}/V_{\mathrm{sth}})^{\mathrm{MMU}}},\\
+  \alpha_{\mathrm{sat}}&=\max\!\left(\mathrm{ASAT}-\frac{\mathrm{LASAT}}{L_{\mathrm{eff}}}
+    -\mathrm{DASAT}\,\Delta T,10^{-6}\right),
+  & V_{D\mathrm{sat}}&=\alpha_{\mathrm{sat}}V_{GTE}.
+\end{aligned}
+\end{equation*}
+
+% 12: level62-current.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  I_a&=\mu_{\mathrm{FET}}C_{\mathrm{ox}}\frac WL
+  \begin{cases}
+    V_{GTE}V_{DS}-\dfrac{V_{DS}^2}{2\alpha_{\mathrm{sat}}},&V_{DS}\le V_{D\mathrm{sat}},\\
+    \dfrac{\alpha_{\mathrm{sat}}V_{GTE}^2}{2},&V_{DS}>V_{D\mathrm{sat}}
+  \end{cases}(1+\lambda V_{DS}),\\
+  I_{\mathrm{sub}}&=\mathrm{MUS}\,C_{\mathrm{ox}}\frac WL V_{\mathrm{sth}}^2
+    \exp(V_{GT}/V_{\mathrm{sth}})\left[1-\exp(-V_{DS}/V_{\mathrm{sth}})\right],\\
+  I_{\min}&=\min(I_a,I_{\mathrm{sub}}),
+  & I_{\max}&=\max(I_a,I_{\mathrm{sub}}),\\
+  I_{\mathrm{chan}}&=\frac{I_{\min}}
+    {\left(1+\sqrt{I_{\min}/I_{\max}}\right)^2},
+  & I_{DS}&=(I_{\mathrm{chan}}+I_{\mathrm{leak}})(1+I_{\mathrm{kink}}).
+\end{aligned}
+\end{equation*}
+
+% 13: level62-leakage-kink.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  I_{\mathrm{leak}}&=\mathrm{I00}\,W\exp(-\mathrm{EB}/V_{\mathrm{th}})
+    \left[1-\exp(-V_{DS}/V_{\mathrm{th}})\right],\\
+  V_{D\mathrm{sk}}&=\frac{V_{DS}}
+    {\left[1+(V_{DS}/V_{D\mathrm{sat}})^3\right]^{1/3}}-V_{\mathrm{th}},\\
+  I_{\mathrm{kink}}&=\frac1{\mathrm{VKINK}}
+    \left(\frac{\mathrm{LKINK}}{L_{\mathrm{eff}}}\right)^{\mathrm{MK}}
+    (V_{DS}-V_{D\mathrm{sk}})
+    \exp\!\left[-\frac{\mathrm{VKINK}}{V_{DS}-V_{D\mathrm{sk}}}\right],\\
+  V_{GS,\mathrm{int}}&=V_{GS}-I_DR_S,
+  & V_{DS,\mathrm{int}}&=V_{DS}-I_D(R_S+R_D).
+\end{aligned}
+\end{equation*}
+
+% 14: level62-charge.svg
+\begin{equation*}\color{guideink}
+\begin{aligned}
+  x_q&=V_{GS}-\mathrm{VTO},
+  & V_{GTE,q}&=\frac{V_{\min}}2\!\left[1+\frac{x_q}{V_{\min}}+
+    \sqrt{\mathrm{DELTA}^2+\left(\frac{x_q}{V_{\min}}-1\right)^2}\right],\\
+  u_\delta(z)&=\frac{z+\sqrt{z^2+\delta^2}}2,
+  & a&=V_{GTE,q},
+  \quad b=u_{0.05\,\mathrm V}(a-V_D),\\
+  Q_g&=\frac{2}{3}C_{\mathrm{ox}}WL
+    \frac{a^2+ab+b^2}{a+b+\varepsilon_1},
+  & f_d&=\frac{b^2}{a^2+b^2+\varepsilon_2},\\
+  \varepsilon_1&=10^{-9}\ \mathrm V,
+  & \varepsilon_2&=10^{-18}\ \mathrm V^2,\\
+  Q_d&=-f_dQ_g,
+  & Q_s&=-(1-f_d)Q_g.
+\end{aligned}
+\end{equation*}
+
+\end{document}
